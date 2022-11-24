@@ -35,7 +35,6 @@ library(ggplot2)
 ```{r, connect, eval=TRUE}
 host = "https://openeo.eurac.edu" # "https://openeo.cloud" # "https://openeo-dev.vito.be" #
 con = openeo::connect(host)
-
 ```
 
 ```{r, login, eval=FALSE}
