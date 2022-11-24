@@ -1,5 +1,3 @@
-message("global level udf script")
-
 udf_setup = function(context) {
   if (!require("bfast")) {
     install.packages("bfast", quiet = TRUE)
