@@ -1,1 +1,191 @@
-put pg here
+{
+  "process_graph": {
+    "apply_TIEIZ2309H": {
+      "arguments": {
+        "data": {
+          "from_node": "filter_bands_HDWRB9254S"
+        },
+        "process": {
+          "process_graph": {
+            "eq_DXQFB8016N": {
+              "arguments": {
+                "case_sensitive": true,
+                "x": {
+                  "from_parameter": "x"
+                },
+                "y": 3
+              },
+              "process_id": "eq"
+            },
+            "eq_IDOUY0948Z": {
+              "arguments": {
+                "case_sensitive": true,
+                "x": {
+                  "from_parameter": "x"
+                },
+                "y": 9
+              },
+              "process_id": "eq"
+            },
+            "eq_VGRVS9025T": {
+              "arguments": {
+                "case_sensitive": true,
+                "x": {
+                  "from_parameter": "x"
+                },
+                "y": 8
+              },
+              "process_id": "eq"
+            },
+            "or_CAFQE2966D": {
+              "arguments": {
+                "x": {
+                  "from_node": "eq_DXQFB8016N"
+                },
+                "y": {
+                  "from_node": "eq_VGRVS9025T"
+                }
+              },
+              "process_id": "or"
+            },
+            "or_ZVUTG9706H": {
+              "arguments": {
+                "x": {
+                  "from_node": "or_CAFQE2966D"
+                },
+                "y": {
+                  "from_node": "eq_IDOUY0948Z"
+                }
+              },
+              "process_id": "or",
+              "result": true
+            }
+          }
+        }
+      },
+      "process_id": "apply"
+    },
+    "filter_bands_HDWRB9254S": {
+      "arguments": {
+        "bands": [
+          "SCL"
+        ],
+        "data": {
+          "from_node": "load_collection_OYDDW9386H"
+        },
+        "wavelengths": null
+      },
+      "process_id": "filter_bands"
+    },
+    "load_collection_OYDDW9386H": {
+      "arguments": {
+        "bands": [
+          "B04",
+          "B08",
+          "SCL"
+        ],
+        "id": "SENTINEL2_L2A_SENTINELHUB",
+        "spatial_extent": {
+          "east": 11.53504,
+          "north": 46.4459,
+          "south": 46.4369,
+          "west": 11.52191
+        },
+        "temporal_extent": [
+          "2016-01-01",
+          "2021-01-01"
+        ]
+      },
+      "process_id": "load_collection"
+    },
+    "mask_SKROL9201R": {
+      "arguments": {
+        "data": {
+          "from_node": "load_collection_OYDDW9386H"
+        },
+        "mask": {
+          "from_node": "apply_TIEIZ2309H"
+        }
+      },
+      "process_id": "mask"
+    },
+    "reduce_dimension_RPLKA6337Z": {
+      "arguments": {
+        "data": {
+          "from_node": "mask_SKROL9201R"
+        },
+        "dimension": "bands",
+        "reducer": {
+          "process_graph": {
+            "add_QSUFJ9427X": {
+              "arguments": {
+                "x": {
+                  "from_node": "array_element_JQZPU2089U"
+                },
+                "y": {
+                  "from_node": "array_element_SMCHX1649O"
+                }
+              },
+              "process_id": "add"
+            },
+            "array_element_JQZPU2089U": {
+              "arguments": {
+                "data": {
+                  "from_parameter": "data"
+                },
+                "index": 1,
+                "return_nodata": false
+              },
+              "process_id": "array_element"
+            },
+            "array_element_SMCHX1649O": {
+              "arguments": {
+                "data": {
+                  "from_parameter": "data"
+                },
+                "index": 0,
+                "return_nodata": false
+              },
+              "process_id": "array_element"
+            },
+            "divide_MDSBJ9025M": {
+              "arguments": {
+                "x": {
+                  "from_node": "subtract_UIHVL4117G"
+                },
+                "y": {
+                  "from_node": "add_QSUFJ9427X"
+                }
+              },
+              "process_id": "divide",
+              "result": true
+            },
+            "subtract_UIHVL4117G": {
+              "arguments": {
+                "x": {
+                  "from_node": "array_element_JQZPU2089U"
+                },
+                "y": {
+                  "from_node": "array_element_SMCHX1649O"
+                }
+              },
+              "process_id": "subtract"
+            }
+          }
+        }
+      },
+      "process_id": "reduce_dimension"
+    },
+    "save_result_FGLXE6329D": {
+      "arguments": {
+        "data": {
+          "from_node": "reduce_dimension_RPLKA6337Z"
+        },
+        "format": "netCDF",
+        "options": {}
+      },
+      "process_id": "save_result",
+      "result": true
+    }
+  }
+}
