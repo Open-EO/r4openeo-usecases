@@ -49,7 +49,7 @@ udf_path = prepare_udf(r_udf, '.')
 def apply_datacube(cube: XarrayDataCube, context: dict) -> XarrayDataCube:
   # You need to change the dimension parameter if you want to reduce the bands dimension!
   new_cube = execute_udf("reduce_dimension", udf_path, cube.get_array(), dimension="t")
-return XarrayDataCube(new_cube)
+  return XarrayDataCube(new_cube)
 
 
 
